@@ -17,6 +17,19 @@
 		body 					{ padding-top:50px; }
 		#wcnode-list 				{ margin-bottom:30px; }
 		#wcnode-form 	 			{ margin-bottom:50px; }
+		.wcnode {
+		  display: inline-block;
+		  border-radius:50%;
+		  width:80px;
+		  height:80px;
+		  line-height:80px;
+  		  text-align:center; /* centrage horizontal */
+  		  background:#5BC0DE;
+		  border:1px solid grey;
+		}
+		.wcnode span{
+			line-height:normal;
+		}
 	</style>
 
 	<!-- SPELLS -->
@@ -25,6 +38,18 @@
 	<script src="js/controllers/main.js"></script> <!-- load up our controller -->
 	<script src="js/services/wcnodes.js"></script> <!-- load our wcnode service -->
 	<script src="js/core.js"></script> <!-- load our main application -->
+
+	<script type="text/ng-template" id="wcnode_render.html">
+	  	<span class="glyphicon glyphicon-minus" aria-hidden="true" title="down vote" ng-click="downVoteWcNode(wcnode._id)"></span>
+		<span>{{ wcnode.downvotes }}</span>
+		<div class="wcnode" ng-click="deleteWcNode(wcnode._id)">
+			<span><h4>{{ wcnode.text }}</h4></span>
+		</div>
+		<span>{{ wcnode.upvotes }}</span>
+		<span class="glyphicon glyphicon-plus" aria-hidden="true" title="up vote" ng-click="upVoteWcNode(wcnode._id)"></span>
+		<div ng-repeat="wcnode in wcnode.children" ng-include="'wcnode_render.html'">
+		</div>
+	</script>
 
 </head>
 <!-- SET THE CONTROLLER -->
@@ -43,10 +68,7 @@
 				
 
 				<!-- LOOP OVER THE WCNODES IN $scope.wcNodes -->
-				<div class="checkbox" ng-repeat="wcnode in wcNodes">
-					<label>
-						<input type="checkbox" ng-click="deleteWcNode(wcnode._id)"> {{ wcnode.text }}
-					</label>
+				<div class="checkbox" ng-repeat="wcnode in wcNodes" ng-include="'wcnode_render.html'">
 				</div>
 
 				<p class="text-center" ng-show="loading">

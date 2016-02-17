@@ -39,6 +39,32 @@ module.exports = function (app) {
 
     });
 
+    // upvote a wcNode
+    app.get('/api/wcNodes/upvote/:wcNode_id', function (req, res) {
+        WcNode.findOne({
+            _id: req.params.wcNode_id
+        }, function (err, wcNode) {
+            if (err)
+                res.send(err);
+            wcNode.upvotes++;
+            wcNode.save();
+            getWcNodes(res);
+        });
+    });
+
+    // downvote a wcNode
+    app.get('/api/wcNodes/downvote/:wcNode_id', function (req, res) {
+        WcNode.findOne({
+            _id: req.params.wcNode_id
+        }, function (err, wcNode) {
+            if (err)
+                res.send(err);
+            wcNode.downvotes++;
+            wcNode.save();
+            getWcNodes(res);
+        });
+    });
+
     // delete a wcNode
     app.delete('/api/wcNodes/:wcNode_id', function (req, res) {
         WcNode.remove({

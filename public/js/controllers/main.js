@@ -35,6 +35,19 @@ angular.module('wcNodeController', [])
 			}
 		};
 
+		// VOTES ==================================================================
+		// up vote a wcNode after checking it
+		$scope.upVoteWcNode = function(id) {
+			$scope.loading = true;
+
+			WcNodes.upvote(id)
+				// if successful creation, call our get function to get all the new wcNodes
+				.success(function(data) {
+					$scope.loading = false;
+					$scope.wcNodes = data; // assign our new list of wcNodes
+				});
+		};
+
 		// DELETE ==================================================================
 		// delete a wcNode after checking it
 		$scope.deleteWcNode = function(id) {
