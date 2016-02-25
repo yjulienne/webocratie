@@ -7,6 +7,7 @@
   "dependencies" : {
     "express"         : "~4.13.4",
     "mongoose"        : "~4.0.6",
+    "mongoose-path-tree"  : "~1.3.5",
     "morgan"          : "~1.1.1",
     "body-parser"     : "~1.4.3",
     "method-override" : "~2.1.1"

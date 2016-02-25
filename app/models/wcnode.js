@@ -1,13 +1,10 @@
 var mongoose = require('mongoose');
+var tree = require('mongoose-path-tree');
 
-module.exports = mongoose.model('WcNode', {
+var WcNode = new mongoose.Schema({
     text: {
         type: String,
         default: ''
-    },
-    children: {
-    	type: Array,
-    	default: []
     },
     upvotes: {
     	type: Number,
@@ -18,3 +15,6 @@ module.exports = mongoose.model('WcNode', {
     	default: 0
     }
 });
+WcNode.plugin(tree);
+
+module.exports = mongoose.model('WcNode', WcNode);

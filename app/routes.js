@@ -1,14 +1,29 @@
 var WcNode = require('./models/wcnode');
 
 function getWcNodes(res) {
-    WcNode.find(function (err, wcNodes) {
+    // WcNode.find({parent:null},function (err, rootNodes) {
 
-        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-        if (err) {
-            res.send(err);
-        }
+    //     // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+    //     if (err) {
+    //         res.send(err);
+    //     }
 
-        res.json(wcNodes); // return all wcNodes in JSON format
+    //     //debugger;
+    //     for (var i = 0; i < rootNodes.length; i++) {
+    //         var rootNode = rootNodes[i];
+    //         rootNode.getChildrenTree(function(err, childNodes){
+    //             rootNode.children = childNodes;
+    //             // return all rootNodes in JSON format
+    //             res.json(rootNodes);
+    //         });
+    //     }
+
+        
+    // });
+
+    WcNode.getChildrenTree({parent:null}, function (err, rootNodes) {
+        debugger;
+        res.json(rootNodes);
     });
 }
 ;
@@ -44,11 +59,17 @@ module.exports = function (app) {
         WcNode.findOne({
             _id: req.params.wcNode_id
         }, function (err, wcNode) {
+            //debugger;
             if (err)
                 res.send(err);
             wcNode.upvotes++;
-            wcNode.save();
-            getWcNodes(res);
+            WcNode.findOne({
+            text: "root"
+            }, function (err, rootNode) {
+                wcNode.parent = rootNode;
+                wcNode.save();
+                getWcNodes(res);
+            });
         });
     });
 
