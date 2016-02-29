@@ -4,6 +4,7 @@ angular.module('wcNodeController', [])
 	.controller('mainController', ['$scope','$http','WcNodes', function($scope, $http, WcNodes) {
 		$scope.formData = {};
 		$scope.loading = true;
+		$scope.selectedWcNode = null;
 
 		// GET =====================================================================
 		// when landing on the page, get all wcNodes and show them
@@ -14,6 +15,11 @@ angular.module('wcNodeController', [])
 				$scope.loading = false;
 			});
 
+		$scope.selectWcNode = function(wcNodeId) {
+			console.log("Entering selectWcNode with wcNodeId = "+wcNodeId+", $scope.selectedWcNode = "+$scope.selectedWcNode);
+			$scope.selectedWcNode = ($scope.selectedWcNode === wcNodeId)?null:wcNodeId;
+		};
+
 		// CREATE ==================================================================
 		// when submitting the add form, send the text to the node API
 		$scope.createWcNode = function() {
@@ -22,6 +28,7 @@ angular.module('wcNodeController', [])
 			// if form is empty, nothing will happen
 			if ($scope.formData.text != undefined) {
 				$scope.loading = true;
+				$scope.formData.parent_id = $scope.selectedWcNode;
 
 				// call the create function from our service (returns a promise object)
 				WcNodes.create($scope.formData)
